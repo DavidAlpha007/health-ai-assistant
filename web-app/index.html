@@ -219,6 +219,50 @@
             justify-content: center;
             margin-bottom: 20px;
             font-size: 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 肩颈拉伸动画 */
+        @keyframes neckAnimation {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-15deg) scale(1.1); }
+            50% { transform: rotate(15deg) scale(1.1); }
+            75% { transform: rotate(-15deg) scale(1.1); }
+        }
+
+        /* 眼部放松动画 */
+        @keyframes eyeAnimation {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            25% { transform: scale(0.8); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+            75% { transform: scale(0.8); opacity: 0.7; }
+        }
+
+        /* 腰背拉伸动画 */
+        @keyframes backAnimation {
+            0%, 100% { transform: translateY(0) scale(1); }
+            25% { transform: translateY(-10px) scale(1.05); }
+            50% { transform: translateY(10px) scale(1.05); }
+            75% { transform: translateY(-10px) scale(1.05); }
+        }
+
+        /* 动画类 */
+        .animation-neck {
+            animation: neckAnimation 2s infinite ease-in-out;
+        }
+
+        .animation-eye {
+            animation: eyeAnimation 2s infinite ease-in-out;
+        }
+
+        .animation-back {
+            animation: backAnimation 2s infinite ease-in-out;
+        }
+
+        /* 暂停动画 */
+        .animation-paused {
+            animation-play-state: paused !important;
         }
 
         .controls {

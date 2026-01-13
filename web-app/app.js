@@ -202,6 +202,43 @@ function initPlan() {
     document.getElementById('punch-btn').disabled = true;
 }
 
+// 语音提示内容
+const voicePrompts = {
+    neck: {
+        start: '开始肩颈拉伸，跟着动画一起做',
+        middle: '保持姿势，深呼吸',
+        end: '肩颈拉伸完成，感觉怎么样？'
+    },
+    eye: {
+        start: '开始眼部放松，跟着动画一起眨眨眼',
+        middle: '眼球转动，缓解疲劳',
+        end: '眼部放松完成，眼睛感觉舒服了吗？'
+    },
+    back: {
+        start: '开始腰背拉伸，保持身体直立',
+        middle: '慢慢伸展，感受肌肉放松',
+        end: '腰背拉伸完成，身体感觉轻松了吗？'
+    }
+};
+
+// 播放语音提示
+function playVoicePrompt(sceneId, type) {
+    if (!appState.isVoiceEnabled || !('speechSynthesis' in window)) {
+        return;
+    }
+    
+    const prompt = voicePrompts[sceneId][type];
+    if (!prompt) return;
+    
+    const utterance = new SpeechSynthesisUtterance(prompt);
+    utterance.lang = 'zh-CN';
+    utterance.rate = 0.9;
+    utterance.pitch = 1;
+    utterance.volume = 1;
+    
+    speechSynthesis.speak(utterance);
+}
+
 // 更新动画区域
 function updateAnimation() {
     const animationArea = document.getElementById('animation-area');
@@ -210,12 +247,24 @@ function updateAnimation() {
         eye: '👁️',
         back: '🩻'
     };
+    
+    // 移除所有动画类
+    animationArea.className = 'animation-area';
+    
+    // 设置图标和动画类
     animationArea.textContent = iconMap[appState.currentScene.id] || '💪';
+    animationArea.classList.add(`animation-${appState.currentScene.id}`);
+    
+    // 如果暂停状态，添加暂停类
+    if (!appState.isPlaying) {
+        animationArea.classList.add('animation-paused');
+    }
 }
 
 // 开始/暂停计时器
 function togglePlay() {
     const playBtn = document.getElementById('play-btn');
+    const animationArea = document.getElementById('animation-area');
     
     if (appState.isPlaying) {
         // 暂停
@@ -223,21 +272,38 @@ function togglePlay() {
         appState.isPlaying = false;
         playBtn.textContent = '开始';
         playBtn.className = 'control-btn play-btn';
+        
+        // 暂停动画
+        animationArea.classList.add('animation-paused');
     } else {
         // 开始
         startTimer();
         appState.isPlaying = true;
         playBtn.textContent = '暂停';
         playBtn.className = 'control-btn pause-btn';
+        
+        // 继续动画
+        animationArea.classList.remove('animation-paused');
+        
+        // 播放开始语音提示
+        playVoicePrompt(appState.currentScene.id, 'start');
     }
 }
 
 // 开始计时器
 function startTimer() {
+    let middlePromptPlayed = false;
+    
     appState.timerInterval = setInterval(() => {
         appState.remainingTime--;
         updateTimerDisplay();
         updateProgress();
+        
+        // 播放中间语音提示（剩余时间为总时间的一半时）
+        if (!middlePromptPlayed && appState.remainingTime === Math.floor(appState.totalTime / 2)) {
+            playVoicePrompt(appState.currentScene.id, 'middle');
+            middlePromptPlayed = true;
+        }
         
         if (appState.remainingTime <= 0) {
             // 时间到
@@ -245,6 +311,9 @@ function startTimer() {
             appState.isPlaying = false;
             document.getElementById('play-btn').textContent = '开始';
             document.getElementById('play-btn').className = 'control-btn play-btn';
+            
+            // 暂停动画
+            document.getElementById('animation-area').classList.add('animation-paused');
             
             // 启用打卡按钮
             document.getElementById('punch-btn').disabled = false;
@@ -254,6 +323,9 @@ function startTimer() {
                 sceneId: appState.currentScene.id,
                 duration: appState.totalTime
             });
+            
+            // 播放结束语音提示
+            playVoicePrompt(appState.currentScene.id, 'end');
             
             showToast('方案完成！');
         }
