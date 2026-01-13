@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>健康AI助手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            min-height: 100vh;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Splash Screen */
+        .splash {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 100vh;
+        }
+
+        .splash-logo {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .splash-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+
+        .splash-subtitle {
+            font-size: 16px;
+            color: #757575;
+            margin-bottom: 30px;
+        }
+
+        .splash-timer {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        /* Login Screen */
+        .login-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #4CAF50;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .code-input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .code-input {
+            flex: 1;
+        }
+
+        .get-code-btn {
+            padding: 12px 20px;
+            background-color: #e0e0e0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #555;
+            white-space: nowrap;
+        }
+
+        .get-code-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .login-btn:disabled {
+            background-color: #BDBDBD;
+            cursor: not-allowed;
+        }
+
+        /* Scene Selection Screen */
+        .scene-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #4CAF50;
+        }
+
+        .scene-item {
+            background-color: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .scene-item:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .scene-item h3 {
+            color: #4CAF50;
+            margin-bottom: 8px;
+        }
+
+        .scene-item p {
+            color: #757575;
+            font-size: 14px;
+        }
+
+        /* Plan Detail Screen */
+        .plan-header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .plan-name {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .timer {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background-color: #e0e0e0;
+            border-radius: 2px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: #4CAF50;
+            border-radius: 2px;
+            width: 0%;
+            transition: width 1s linear;
+        }
+
+        .animation-area {
+            background-color: #f5f5f5;
+            height: 200px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 48px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .control-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .play-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .pause-btn {
+            background-color: #FF9800;
+            color: white;
+        }
+
+        .voice-btn {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .punch-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .punch-btn:disabled {
+            background-color: #BDBDBD;
+            cursor: not-allowed;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-size: 14px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            display: block;
+            animation: fadeInOut 2s ease;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            90% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Splash Screen -->
+        <div id="splash-screen" class="screen active">
+            <div class="splash">
+                <div class="splash-logo">💪</div>
+                <h1 class="splash-title">健康AI助手</h1>
+                <p class="splash-subtitle">缓解疲劳，守护健康</p>
+                <div class="splash-timer">3秒后自动跳转...</div>
+                <button onclick="skipSplash()" style="margin-top: 20px; padding: 10px 20px; border: none; border-radius: 20px; background-color: rgba(76, 175, 80, 0.1); color: #4CAF50; cursor: pointer;">跳过</button>
+            </div>
+        </div>
+
+        <!-- Login Screen -->
+        <div id="login-screen" class="screen">
+            <h1 class="login-title">一键登录</h1>
+            <div class="input-group">
+                <label for="phone">手机号</label>
+                <input type="tel" id="phone" placeholder="请输入手机号" maxlength="11">
+            </div>
+            <div class="input-group">
+                <label for="code">验证码</label>
+                <div class="code-input-group">
+                    <input type="text" id="code" class="code-input" placeholder="请输入验证码" maxlength="6">
+                    <button id="get-code-btn" class="get-code-btn" onclick="sendCode()">获取验证码</button>
+                </div>
+            </div>
+            <button id="login-btn" class="login-btn" onclick="login()" disabled>一键登录</button>
+        </div>
+
+        <!-- Scene Selection Screen -->
+        <div id="scene-screen" class="screen">
+            <h1 class="scene-title">选择缓解场景</h1>
+            <div class="scene-item" onclick="selectScene('neck', '肩颈拉伸')">
+                <h3>💪 肩颈拉伸</h3>
+                <p>缓解肩颈疲劳，改善姿势</p>
+            </div>
+            <div class="scene-item" onclick="selectScene('eye', '眼部放松')">
+                <h3>👁️ 眼部放松</h3>
+                <p>缓解眼部疲劳，保护视力</p>
+            </div>
+            <div class="scene-item" onclick="selectScene('back', '腰背拉伸')">
+                <h3>🩻 腰背拉伸</h3>
+                <p>缓解腰背不适，改善核心力量</p>
+            </div>
+        </div>
+
+        <!-- Plan Detail Screen -->
+        <div id="plan-screen" class="screen">
+            <div class="plan-header">
+                <div id="plan-name" class="plan-name">肩颈拉伸</div>
+                <div id="plan-timer" class="timer">03:00</div>
+            </div>
+            <div class="progress-bar">
+                <div id="progress" class="progress"></div>
+            </div>
+            <div id="animation-area" class="animation-area">💪</div>
+            <div class="controls">
+                <button id="play-btn" class="control-btn play-btn" onclick="togglePlay()">开始</button>
+                <button id="voice-btn" class="control-btn voice-btn" onclick="toggleVoice()">🔊 语音</button>
+            </div>
+            <button id="punch-btn" class="punch-btn" onclick="punchCard()" disabled>一键打卡</button>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

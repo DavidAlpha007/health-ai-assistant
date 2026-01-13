@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        android:background="@color/primary">
+
+        <TextView
+            android:id="@+id/scene_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="肩颈拉伸"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/timer_display"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="03:00"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+    <!-- Progress Bar -->
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:indeterminate="false"
+        android:max="180"
+        android:progress="0"
+        android:progressDrawable="@drawable/progress_bar_bg"
+        android:visibility="visible" />
+
+    <!-- Animation Area -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:background="@color/light_gray">
+
+        <ImageView
+            android:id="@+id/animation_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:contentDescription="缓解动作动画" />
+    </LinearLayout>
+
+    <!-- Control Area -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:background="@color/white">
+
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="24dp">
+
+            <com.healthai.assistant.component.MinimalButton
+                android:id="@+id/play_pause_button"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="开始"
+                android:textSize="18sp"
+                app:buttonType="primary"
+                android:layout_marginHorizontal="16dp" />
+
+            <com.healthai.assistant.component.MinimalButton
+                android:id="@+id/voice_toggle_button"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="语音"
+                android:textSize="18sp"
+                app:buttonType="secondary"
+                android:layout_marginHorizontal="16dp" />
+        </LinearLayout>
+
+        <!-- Punch Card Button -->
+        <com.healthai.assistant.component.MinimalButton
+            android:id="@+id/punch_card_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="一键打卡"
+            android:textSize="18sp"
+            app:buttonType="primary"
+            android:enabled="false" />
+    </LinearLayout>
+
+</LinearLayout>

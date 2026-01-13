@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App name -->
+    <string name="app_name">健康AI助手</string>
+    
+    <!-- Splash screen -->
+    <string name="splash_title">健康AI助手</string>
+    <string name="splash_subtitle">缓解疲劳，守护健康</string>
+    <string name="splash_skip">跳过</string>
+    
+    <!-- Login screen -->
+    <string name="login_title">一键登录</string>
+    <string name="login_phone_hint">请输入手机号</string>
+    <string name="login_code_hint">请输入验证码</string>
+    <string name="login_get_code">获取验证码</string>
+    <string name="login_button">一键登录</string>
+    <string name="login_phone_error">请输入正确的手机号</string>
+    <string name="login_code_error">请输入6位验证码</string>
+    
+    <!-- Scene selection screen -->
+    <string name="scene_title">选择缓解场景</string>
+    <string name="scene_neck_title">肩颈拉伸</string>
+    <string name="scene_neck_desc">缓解肩颈疲劳，改善姿势</string>
+    <string name="scene_eye_title">眼部放松</string>
+    <string name="scene_eye_desc">缓解眼部疲劳，保护视力</string>
+    <string name="scene_back_title">腰背拉伸</string>
+    <string name="scene_back_desc">缓解腰背不适，改善核心力量</string>
+    
+    <!-- Plan detail screen -->
+    <string name="plan_play">开始</string>
+    <string name="plan_pause">暂停</string>
+    <string name="plan_voice_on">语音</string>
+    <string name="plan_voice_off">静音</string>
+    <string name="plan_punch">一键打卡</string>
+    <string name="plan_finished">方案完成！</string>
+    <string name="plan_punch_success">打卡成功！</string>
+    
+    <!-- Toast messages -->
+    <string name="toast_network_error">网络异常，请稍后重试</string>
+    <string name="toast_login_expired">登录状态已失效，请重新登录</string>
+    <string name="toast_code_sent">验证码已发送</string>
+    <string name="toast_login_success">登录成功</string>
+    <string name="toast_voice_on">语音已开启</string>
+    <string name="toast_voice_off">语音已关闭</string>
+</resources>
